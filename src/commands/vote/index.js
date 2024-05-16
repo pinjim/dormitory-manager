@@ -11,18 +11,30 @@ export const command = new SlashCommandBuilder()
     .addStringOption(option =>
         option.setName('options')
             .setDescription('自訂義選項，選項間用空格隔開 (最多五個選項，預設為"同意"&"不同意")')
-            .setRequired(false));
+            .setRequired(false))
+    .addIntegerOption(option =>
+         option.setName('ephemeral')
+            .setDescription('是否為私密投票 (預設為否)')
+            .setRequired(false)
+            .addChoices(
+                { name: '是', value: 0 },
+                { name: '否', value: 1 },
+        ));
 
 export const action = async (ctx) => {
     const ctxTime = new Date();
     const votedUsers = new Set();
     const name = ctx.options.getString('name');
     const options = ctx.options.getString('options');
+    const ephemeralset = ctx.options.getInteger('ephemeral');
     let option;
     let row;
     let buttons = [];
     let length;
     let voteresult = [];
+    let ephemeralvalue = false;
+    if (ephemeralset === 0) ephemeralvalue = true;
+    else if (ephemeralset === 1) ephemeralvalue = false;
     //自訂選項
     if (options != null) {
         option = options.split(" ");
@@ -147,7 +159,9 @@ export const action = async (ctx) => {
                                 text: 'powered by @pinjim0407'
                             }
                         }
-                    ]});
+                    ],
+                    ephemeral: ephemeralvalue
+                });
                 }
             }
         } catch (error) {
