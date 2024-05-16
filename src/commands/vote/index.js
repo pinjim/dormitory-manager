@@ -13,7 +13,7 @@ export const command = new SlashCommandBuilder()
             .setDescription('自訂義選項，選項間用空格隔開 (最多五個選項，預設為"同意"&"不同意")')
             .setRequired(false))
     .addIntegerOption(option =>
-         option.setName('ephemeral')
+         option.setName('private')
             .setDescription('是否為私密投票 (預設為否)')
             .setRequired(false)
             .addChoices(
@@ -26,15 +26,15 @@ export const action = async (ctx) => {
     const votedUsers = new Set();
     const name = ctx.options.getString('name');
     const options = ctx.options.getString('options');
-    const ephemeralset = ctx.options.getInteger('ephemeral');
+    const privateset = ctx.options.getInteger('private');
     let option;
     let row;
     let buttons = [];
     let length;
     let voteresult = [];
-    let ephemeralvalue = false;
-    if (ephemeralset === 0) ephemeralvalue = true;
-    else if (ephemeralset === 1) ephemeralvalue = false;
+    let privatevalue = false;
+    if (privateset === 0) privatevalue = true;
+    else if (ephemeralset === 1) privatevalue = false;
     //自訂選項
     if (options != null) {
         option = options.split(" ");
@@ -160,7 +160,7 @@ export const action = async (ctx) => {
                             }
                         }
                     ],
-                    ephemeral: ephemeralvalue
+                    ephemeral: privatevalue
                 });
                 }
             }
