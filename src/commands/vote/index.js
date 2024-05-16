@@ -3,7 +3,7 @@ import { errorMessages } from 'vue/compiler-sfc';
 
 export const command = new SlashCommandBuilder()
     .setName('投票')
-    .setDescription('開始一個新投票')
+    .setDescription('發起新全員投票')
     .addStringOption(option =>
         option.setName('name')
             .setDescription('投票主題')
@@ -123,7 +123,7 @@ export const action = async (ctx) => {
         }
         return true;
     };
-    const collector = message.createMessageComponentCollector({ filter: collectorFilter, time: 300_000 });
+    const collector = message.createMessageComponentCollector({ filter: collectorFilter, time: 10_000 });
 
     collector.on('collect', async (interaction) => {
         try {
@@ -183,7 +183,7 @@ export const action = async (ctx) => {
             let blue = '<:blue:1240696276111196222><:blue:1240696276111196222>'.repeat(bluenumber);
             let gray = '<:gray:1240701126903599187><:gray:1240701126903599187>'.repeat(10-bluenumber);
             fields.push({
-                name: `*${option[j]} : ${voteresult[j]}票(${(percentage)*100}%)*`,
+                name: `*${option[j]} : ${voteresult[j]}票(${Math.round((percentage)*100)}%)*`,
                 value: `${blue+gray}`
             });
         }
