@@ -123,7 +123,7 @@ export const action = async (ctx) => {
         }
         return true;
     };
-    const collector = message.createMessageComponentCollector({ filter: collectorFilter, time: 10_000 });
+    const collector = message.createMessageComponentCollector({ filter: collectorFilter, time: 300_000 });
 
     collector.on('collect', async (interaction) => {
         try {
