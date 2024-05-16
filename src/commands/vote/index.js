@@ -34,7 +34,7 @@ export const action = async (ctx) => {
     let voteresult = [];
     let privatevalue = false;
     if (privateset === 0) privatevalue = true;
-    else if (ephemeralset === 1) privatevalue = false;
+    else if (privateset === 1) privatevalue = false;
     //自訂選項
     if (options != null) {
         option = options.split(" ");
