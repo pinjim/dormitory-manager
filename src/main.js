@@ -6,6 +6,7 @@ import { useAppStore } from '@/store/app'
 import { RefreshMemberList } from '@/commands/newweek'
 import { GetDateInfo } from '@/commands/schedule'
 import fs from 'fs';
+import { GetWeatherData, ProcessWeatherData } from './commands/weather'
 
 vueInit()
 dotenv.config()
@@ -72,6 +73,8 @@ client.once('ready', () => {
         const month = currentTime.getMonth() + 1;
         const date = currentTime.getDate();
         const dayOfWeek = currentTime.getDay();
+        const data = await GetWeatherData(8);
+        const locationname = data.records.location[0].locationName;
         console.log(`\n今天是${year}/${month}/${date} 周${dayOfWeek}，程式已運行${counter}分鐘。\n自動發訊目標時間 : 00:00 , 目前時間 : ${consoleHour.toString().padStart(2, '0')}:${consoleMinute.toString().padStart(2, '0')}\n排程表更新狀態 : ${NewWeekCheck}`);
         counter+=1;
         if (dayOfWeek === 1 && NewWeekCheck === false) {
@@ -186,6 +189,35 @@ client.once('ready', () => {
                 default:
                     fieldcontent = "無法正確取得日期資訊，請嘗試重新使用指令。";
             }
+            let info = [];
+            for (let i=0; i<5; i++){
+                let times = ProcessWeatherData(data,i);
+                let [time1, time2, time3] = times;
+                info[i] = {value1 : time1, value2 : time2, value3 : time3};
+            }
+            let infodescription = [
+                { valueimage: '', comfort: '' }, 
+                { valueimage: '', comfort: '' }, 
+                { valueimage: '', comfort: '' }
+            ];
+            let str = [];
+            str[0] = info[0].value1;
+            str[1] = info[0].value2;
+            str[2] = info[0].value3;
+            for(let i=0; i<3; i++){
+                if(str[i].includes('晴'))
+                    infodescription[i].valueimage = 'https://media.discordapp.net/attachments/1060629545398575255/1241859471584657478/1.png?ex=664bbb42&is=664a69c2&hm=688dea48450c969ab57f5a33f348a210a45869e30cedc3b0bb3c9caa034b3d1b&=&format=webp&quality=lossless';
+                else if(str[i].includes('雨') && !str[i].includes('晴'))
+                    infodescription[i].valueimage = 'https://media.discordapp.net/attachments/1060629545398575255/1241859478471835769/5.png?ex=664bbb44&is=664a69c4&hm=8a7252ca6d6842177e1dca412a600b710dd4eb61e6bd1a4f882091820cedb280&=&format=webp&quality=lossless';
+                else if( str[i].includes('多雲') && str[i].includes('晴'))
+                    infodescription[i].valueimage = 'https://media.discordapp.net/attachments/1060629545398575255/1241859487397187745/3.png?ex=664bbb46&is=664a69c6&hm=6e10f9505e1283feb3e95f29c61c53b0f0b6b67767fddfce217803640a280fd9&=&format=webp&quality=lossless';
+                else if(str[i].includes('晴') && str[i].includes('雨'))
+                    infodescription[i].valueimage = 'https://media.discordapp.net/attachments/1060629545398575255/1241859483236569189/4.png?ex=664bbb45&is=664a69c5&hm=d46bcce80c070fcbdc459a967e59c1a1782dc47f3424f33a0483b0cd9be2184d&=&format=webp&quality=lossless';
+                else if(str[i].includes('多雲') || str[i].includes('陰'))
+                    infodescription[i].valueimage = 'https://media.discordapp.net/attachments/1060629545398575255/1241859491062874213/2.png?ex=664bbb47&is=664a69c7&hm=af9f7fbd990d1945a5419a9192949795aab2ed0c584b47f646acdf7d6209ebfb&=&format=webp&quality=lossless';
+                else
+                    infodescription[i].valueimage = 'https://media.discordapp.net/attachments/1060629545398575255/1241863406420754462/Lovepik_com-611699258-Error_symbol.png?ex=664bbeec&is=664a6d6c&hm=aea586a0f0cb0d0c47931a16f6c5dd59c9fccf423fc5b646aca49ca059784641&=&format=webp&quality=lossless';
+            }
             if (channel) {
                 channel.send({
                     content: `<@&${roleID}>`,
@@ -210,6 +242,79 @@ client.once('ready', () => {
                             footer: {
                                 text: '工作內容及注意事項請使用“/排程”指令以確認。\npowered by @pinjim0407'
                             }
+                        },
+                        {   
+                            author: {
+                                name: '中央氣象局',
+                                iconURL: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/ROC_Central_Weather_Bureau.svg/1200px-ROC_Central_Weather_Bureau.svg.png'
+                            },
+                            type: 'rich',
+                            title: `${locationname} ${month}月${date}日的天氣預報`,
+                            description: `*[datas from CWB open data API](https://www.cwa.gov.tw/V8/C/)*\n*[images from lovepik.com](https://zh.lovepik.com/)*`,
+                            fields: [
+                            ],
+                            timestamp: ctxTime.toISOString(),
+                            footer: {
+                                text: '此指令僅為簡易查詢功能，\n實際情況以中央氣象局資料為準。\npowered by @pinjim0407'
+                            }
+                        },
+                        {
+                            type: 'rich',
+                            title: `清晨 *00:00 ~ 06:00*`,
+                            description: `${(info[0].value1).padEnd(11, ' ')}`,
+                            color: 0xADD8E6,
+                            thumbnail: {
+                                url: infodescription[0].valueimage
+                            },
+                            fields: [
+                                {
+                                    "name": `最高${info[4].value1}℃ 最低${info[2].value1}℃`,
+                                    "value": `*${info[3].value1}*`,
+                                },
+                                {
+                                    "name": `降雨機率 : ${info[1].value1}%`,
+                                    "value": `${'<:blue:1240696276111196222>'.repeat((info[1].value1)/10)}${'<:gray:1240701126903599187>'.repeat(10-((info[1].value1)/10))}`,
+                                },
+                            ],
+                        },
+                        {
+                            type: 'rich',
+                            title: `日間 *06:00 ~ 18:00*`,
+                            description: `${(info[0].value2).padEnd(11, ' ')}`,
+                            color: 0x87CEEB,
+                            thumbnail: {
+                                url: infodescription[1].valueimage
+                            },
+                            fields: [
+                                {
+                                    "name": `最高${info[4].value2}℃ 最低${info[2].value2}℃`,
+                                    "value": `*${info[3].value2}*`,
+                                },
+                                {
+                                    "name": `降雨機率 : ${info[1].value2}%`,
+                                    "value": `${'<:blue:1240696276111196222>'.repeat((info[1].value2)/10)}${'<:gray:1240701126903599187>'.repeat(10-((info[1].value2)/10))}`,
+                                },
+                            ],
+                        },
+                        {
+                            type: 'rich',
+                            title: `夜間 *18:00 ~ 24:00*`,
+                            description: `${(info[0].value3).padEnd(11, ' ')}`,
+                            color: 0x000080,
+                            thumbnail: {
+                                url: infodescription[2].valueimage
+                            },
+                            fields: [
+                                {
+                                    "name": `最高${info[4].value3}℃ 最低${info[2].value3}℃`,
+                                    "value": `*${info[3].value3}*`,
+                                },
+                                {
+                                    "name": `降雨機率 : ${info[1].value3}%`,
+                                    "value": `${'<:blue:1240696276111196222>'.repeat((info[1].value3)/10)}${'<:gray:1240701126903599187>'.repeat(10-((info[1].value3)/10))}`,
+                                },
+         
+                            ],
                         }
                     ]
                 });
