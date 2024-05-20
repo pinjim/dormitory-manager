@@ -194,8 +194,8 @@ export const action = async (ctx) => {
         for (let j = 0; j < length; j++) {
             let percentage = total !== 0 ? (voteresult[j] / total) : 0;
             let bluenumber = Math.round(percentage*10);
-            let blue = '<:blue:1240696276111196222><:blue:1240696276111196222>'.repeat(bluenumber);
-            let gray = '<:gray:1240701126903599187><:gray:1240701126903599187>'.repeat(10-bluenumber);
+            let blue = '<:blue:1240696276111196222>'.repeat(bluenumber*2);
+            let gray = '<:gray:1240701126903599187>'.repeat((10-bluenumber)*2);
             fields.push({
                 name: `*${option[j]} : ${voteresult[j]}票(${Math.round((percentage)*100)}%)*`,
                 value: `${blue+gray}`
