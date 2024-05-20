@@ -58,7 +58,7 @@ client.once('ready', () => {
         status: 'idle',
     });
                                             /* 目標伺服器租屋聊天室     測試伺服器測試聊天室 */ 
-    const channel = client.channels.cache.get('1099675393335763107'/*'1043818575548391519'*/);
+    const channel = client.channels.cache.get(/*'1099675393335763107'*/'1043818575548391519');
     const roleID = '1147921909091156009';
     let titlecontent;
     let fieldcontent;
@@ -250,18 +250,15 @@ client.once('ready', () => {
                             },
                             type: 'rich',
                             title: `${locationname} ${month}月${date}日的天氣預報`,
-                            description: `*[datas from CWB open data API](https://www.cwa.gov.tw/V8/C/)*\n*[images from lovepik.com](https://zh.lovepik.com/)*`,
-                            fields: [
-                            ],
-                            timestamp: ctxTime.toISOString(),
-                            footer: {
-                                text: '此指令僅為簡易查詢功能，\n實際情況以中央氣象局資料為準。\npowered by @pinjim0407'
-                            }
+                            description: `*datas from [CWB Opendata API](https://opendata.cwa.gov.tw/dist/opendata-swagger.html#/%E9%A0%90%E5%A0%B1/get_v1_rest_datastore_F_C0032_001)*`,
+                            image: { 
+                                url : 'https://media.discordapp.net/attachments/1060629545398575255/1242117290519040070/N-Picture16.jpg?ex=664cab5f&is=664b59df&hm=1192e892d3bbc2fd23e1716d9b43c1a896b548901aa52c75778236f37d123f9a&=&format=webp&width=860&height=221'
+                            },
                         },
                         {
                             type: 'rich',
                             title: `清晨 *00:00 ~ 06:00*`,
-                            description: `${(info[0].value1).padEnd(11, ' ')}`,
+                            description: `${(info[0].value1)}`,
                             color: 0xADD8E6,
                             thumbnail: {
                                 url: infodescription[0].valueimage
@@ -272,15 +269,15 @@ client.once('ready', () => {
                                     "value": `*${info[3].value1}*`,
                                 },
                                 {
-                                    "name": `降雨機率 : ${info[1].value1}%`,
-                                    "value": `${'<:blue:1240696276111196222>'.repeat((info[1].value1)/10)}${'<:gray:1240701126903599187>'.repeat(10-((info[1].value1)/10))}`,
+                                    "name": `降雨機率 : `,
+                                    "value": `${'<:blue:1240696276111196222>'.repeat((info[1].value1)/10)}${'<:gray:1240701126903599187>'.repeat(10-((info[1].value1)/10))} *${info[1].value1}%*`,
                                 },
                             ],
                         },
                         {
                             type: 'rich',
                             title: `日間 *06:00 ~ 18:00*`,
-                            description: `${(info[0].value2).padEnd(11, ' ')}`,
+                            description: `${(info[0].value2)}`,
                             color: 0x87CEEB,
                             thumbnail: {
                                 url: infodescription[1].valueimage
@@ -291,15 +288,15 @@ client.once('ready', () => {
                                     "value": `*${info[3].value2}*`,
                                 },
                                 {
-                                    "name": `降雨機率 : ${info[1].value2}%`,
-                                    "value": `${'<:blue:1240696276111196222>'.repeat((info[1].value2)/10)}${'<:gray:1240701126903599187>'.repeat(10-((info[1].value2)/10))}`,
+                                    "name": `降雨機率 : `,
+                                    "value": `${'<:blue:1240696276111196222>'.repeat((info[1].value2)/10)}${'<:gray:1240701126903599187>'.repeat(10-((info[1].value2)/10))} *${info[1].value2}%*`,
                                 },
                             ],
                         },
                         {
                             type: 'rich',
                             title: `夜間 *18:00 ~ 24:00*`,
-                            description: `${(info[0].value3).padEnd(11, ' ')}`,
+                            description: `${(info[0].value3)}`,
                             color: 0x000080,
                             thumbnail: {
                                 url: infodescription[2].valueimage
@@ -310,8 +307,8 @@ client.once('ready', () => {
                                     "value": `*${info[3].value3}*`,
                                 },
                                 {
-                                    "name": `降雨機率 : ${info[1].value3}%`,
-                                    "value": `${'<:blue:1240696276111196222>'.repeat((info[1].value3)/10)}${'<:gray:1240701126903599187>'.repeat(10-((info[1].value3)/10))}`,
+                                    "name": `降雨機率 : `,
+                                    "value": `${'<:blue:1240696276111196222>'.repeat((info[1].value3)/10)}${'<:gray:1240701126903599187>'.repeat(10-((info[1].value3)/10))} *${info[1].value3}%*`,
                                 },
          
                             ],
