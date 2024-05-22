@@ -54,18 +54,40 @@ export const SaveNewWeekCheck = (data) => {
     }
 }
 
+export const GetEarthQuakeID = () => {
+    let earthquakeID;
+    try {
+        const data = fs.readFileSync('src/commands/earthquakeID.txt', 'utf-8');
+        earthquakeID = data.trim();
+        return earthquakeID;
+    } catch (error) {
+        console.error('讀取確認狀態時發生錯誤：', error);
+    }
+
+}
+
+export const SaveEarthQuakeID = (id) => {
+    const idString = id.toString();
+    try {
+        fs.writeFileSync('src/commands/earthquakeID.txt', idString, 'utf-8');
+    } catch (error) {
+        console.error('寫入確認狀態時發生錯誤：', error);
+    }
+}
+
 client.once('ready', () => { 
     client.user.setPresence({
         status: 'idle',
     });
+    let channels = [];
                                             /* 目標伺服器租屋聊天室     測試伺服器測試聊天室 */ 
-    const channel = client.channels.cache.get('1099675393335763107'/*'1043818575548391519'*/);
+    channels[0] = client.channels.cache.get('1099675393335763107'/*'1043818575548391519'*/);
+    channels[1] = client.channels.cache.get('1242787299511500840');
     const roleID = '1147921909091156009';
     let titlecontent;
     let fieldcontent;
     let fieldvalue;
     let counter = 1;
-    let lastnumber = 0;
     setInterval(async () => {
         const currentTime = new Date();
         let consoleHour = currentTime.getHours();
@@ -85,8 +107,8 @@ client.once('ready', () => {
             console.log('自動更新功能讀取到的名單 :');
             console.log(MembersOnDuty);
             const dateinfo = GetDateInfo();
-            if (channel) {
-                channel.send({
+            if (channels[0]) {
+                channels[0].send({
                 embeds: [
                     {
                         type: 'rich',
@@ -223,8 +245,8 @@ client.once('ready', () => {
                 else
                     infodescription[i].valueimage = 'https://media.discordapp.net/attachments/1060629545398575255/1241863406420754462/Lovepik_com-611699258-Error_symbol.png?ex=664bbeec&is=664a6d6c&hm=aea586a0f0cb0d0c47931a16f6c5dd59c9fccf423fc5b646aca49ca059784641&=&format=webp&quality=lossless';
             }
-            if (channel) {
-                channel.send({
+            if (channels[0]) {
+                channels[0].send({
                     content: `<@&${roleID}>`,
                     embeds: [
                         {
@@ -331,6 +353,7 @@ client.once('ready', () => {
                 const data = await response.json();
         
                 if (data.success === 'true') {
+                    let lastnumber = GetEarthQuakeID();
                     const earthquakeInfo = data.records.Earthquake;
                     const lastReportTime = new Date(earthquakeInfo[0].EarthquakeInfo.OriginTime);
                     const report = earthquakeInfo[0];
@@ -381,29 +404,32 @@ client.once('ready', () => {
                             newfield = { name: `${areatable[i].AreaDesc}`, value: `${areatable[i].CountyName}`, inline: false};
                             field.push(newfield);
                         }
-                        await channel.send({
-                            embeds: [
-                            {   
-                            author: {
-                                name: '中央氣象局',
-                                iconURL: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/ROC_Central_Weather_Bureau.svg/1200px-ROC_Central_Weather_Bureau.svg.png'
-                            },
-                            type: 'rich',
-                            title: `**地震報告 #${number}**`,
-                            url: reportUrl,
-                            description: `${reportContent}`,
-                            fields: field,
-                            color: values[2].color,
-                            image: { 
-                                url: imageUrl
-                            },
-                            footer: {
-                                text: `powered by @pinjim0407`
-                            },
-                            timestamp: lastReportTime,
-                            },
-                        ]});
+                        for(let i=0; i<2; i++){
+                            await channels[i].send({
+                                embeds: [
+                                {   
+                                author: {
+                                    name: '中央氣象局',
+                                    iconURL: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/ROC_Central_Weather_Bureau.svg/1200px-ROC_Central_Weather_Bureau.svg.png'
+                                },
+                                type: 'rich',
+                                title: `**地震報告 #${number}**`,
+                                url: reportUrl,
+                                description: `${reportContent}`,
+                                fields: field,
+                                color: values[2].color,
+                                image: { 
+                                    url: imageUrl
+                                },
+                                footer: {
+                                    text: `powered by @pinjim0407`
+                                },
+                                timestamp: lastReportTime,
+                                },
+                            ]});
+                        }
                         lastnumber = number;
+                        SaveEarthQuakeID(lastnumber);
                     }
                 }
                 else {
@@ -412,7 +438,7 @@ client.once('ready', () => {
             }catch (error) {
                 console.error(error);
             }
-        }, 10000);
+    }, 5000);
     });
 
 client.login(process.env.TOKEN)
