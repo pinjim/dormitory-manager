@@ -6,7 +6,7 @@ import { useAppStore } from '@/store/app'
 import { RefreshMemberList } from '@/commands/newweek'
 import { GetDateInfo } from '@/commands/schedule'
 import fs from 'fs';
-import { GetWeatherData, ProcessWeatherData } from './commands/weather'
+import { GetWeatherData, ProcessWeatherData, FormatDataTimeInfo } from './commands/weather'
 
 vueInit()
 dotenv.config()
@@ -58,7 +58,7 @@ client.once('ready', () => {
         status: 'idle',
     });
                                             /* 目標伺服器租屋聊天室     測試伺服器測試聊天室 */ 
-    const channel = client.channels.cache.get(/*'1099675393335763107'*/'1043818575548391519');
+    const channel = client.channels.cache.get('1099675393335763107'/*'1043818575548391519'*/);
     const roleID = '1147921909091156009';
     let titlecontent;
     let fieldcontent;
@@ -73,8 +73,6 @@ client.once('ready', () => {
         const month = currentTime.getMonth() + 1;
         const date = currentTime.getDate();
         const dayOfWeek = currentTime.getDay();
-        const data = await GetWeatherData(8);
-        const locationname = data.records.location[0].locationName;
         console.log(`\n今天是${year}/${month}/${date} 周${dayOfWeek}，程式已運行${counter}分鐘。\n自動發訊目標時間 : 00:00 , 目前時間 : ${consoleHour.toString().padStart(2, '0')}:${consoleMinute.toString().padStart(2, '0')}\n排程表更新狀態 : ${NewWeekCheck}`);
         counter+=1;
         if (dayOfWeek === 1 && NewWeekCheck === false) {
@@ -148,7 +146,12 @@ client.once('ready', () => {
             }
         }
         if (/*時*/currentTime.getHours() === 0 && /*分*/currentTime.getMinutes() === 0) {
-            const MembersOnDuty = GetMembersOnDuty()
+            const MembersOnDuty = GetMembersOnDuty();
+            const struct = await GetWeatherData(8);
+            const locationname = struct.data.records.location[0].locationName;
+            const timeinfo1 = {starttime: struct.data.records.location[0].weatherElement[0].time[0].startTime, endtime: struct.data.records.location[0].weatherElement[0].time[0].endTime};
+            const timeinfo2 = {starttime: struct.data.records.location[0].weatherElement[0].time[1].startTime, endtime: struct.data.records.location[0].weatherElement[0].time[1].endTime};
+            const timeinfo3 = {starttime: struct.data.records.location[0].weatherElement[0].time[2].startTime, endtime: struct.data.records.location[0].weatherElement[0].time[2].endTime};
             const dayOfWeek = currentTime.getDay();
             switch (dayOfWeek) {
                 case 0:
@@ -191,7 +194,7 @@ client.once('ready', () => {
             }
             let info = [];
             for (let i=0; i<5; i++){
-                let times = ProcessWeatherData(data,i);
+                let times = ProcessWeatherData(struct.data,i);
                 let [time1, time2, time3] = times;
                 info[i] = {value1 : time1, value2 : time2, value3 : time3};
             }
@@ -249,7 +252,8 @@ client.once('ready', () => {
                                 iconURL: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/ROC_Central_Weather_Bureau.svg/1200px-ROC_Central_Weather_Bureau.svg.png'
                             },
                             type: 'rich',
-                            title: `${locationname} ${month}月${date}日的天氣預報`,
+                            title: `${locationname}的三十六小時天氣預報`,
+                            url: struct.url,
                             description: `*datas from [CWB Opendata API](https://opendata.cwa.gov.tw/dist/opendata-swagger.html#/%E9%A0%90%E5%A0%B1/get_v1_rest_datastore_F_C0032_001)*`,
                             image: { 
                                 url : 'https://media.discordapp.net/attachments/1060629545398575255/1242117290519040070/N-Picture16.jpg?ex=664cab5f&is=664b59df&hm=1192e892d3bbc2fd23e1716d9b43c1a896b548901aa52c75778236f37d123f9a&=&format=webp&width=860&height=221'
@@ -257,60 +261,59 @@ client.once('ready', () => {
                         },
                         {
                             type: 'rich',
-                            title: `清晨 *00:00 ~ 06:00*`,
-                            description: `${(info[0].value1)}`,
+                            title: `${FormatDataTimeInfo(timeinfo1)}`,
+                            description: `${info[0].value1}`,
                             color: 0xADD8E6,
                             thumbnail: {
                                 url: infodescription[0].valueimage
                             },
                             fields: [
                                 {
-                                    "name": `最高${info[4].value1}℃ 最低${info[2].value1}℃`,
-                                    "value": `*${info[3].value1}*`,
+                                    name: `最高${info[4].value1}℃ 最低${info[2].value1}℃`,
+                                    value: `*${info[3].value1}*`,
                                 },
                                 {
-                                    "name": `降雨機率 : `,
-                                    "value": `${'<:blue:1240696276111196222>'.repeat((info[1].value1)/10)}${'<:gray:1240701126903599187>'.repeat(10-((info[1].value1)/10))} *${info[1].value1}%*`,
+                                    name: `降雨機率 : `,
+                                    value: `${'<:blue:1240696276111196222>'.repeat((info[1].value1)/10)}${'<:gray:1240701126903599187>'.repeat(10-((info[1].value1)/10))} *${info[1].value1}%*`,
                                 },
                             ],
                         },
                         {
                             type: 'rich',
-                            title: `日間 *06:00 ~ 18:00*`,
-                            description: `${(info[0].value2)}`,
+                            title: `${FormatDataTimeInfo(timeinfo2)}`,
+                            description: `${info[0].value2}`,
                             color: 0x87CEEB,
                             thumbnail: {
                                 url: infodescription[1].valueimage
                             },
                             fields: [
                                 {
-                                    "name": `最高${info[4].value2}℃ 最低${info[2].value2}℃`,
-                                    "value": `*${info[3].value2}*`,
+                                    name: `最高${info[4].value2}℃ 最低${info[2].value2}℃`,
+                                    value: `*${info[3].value2}*`,
                                 },
                                 {
-                                    "name": `降雨機率 : `,
-                                    "value": `${'<:blue:1240696276111196222>'.repeat((info[1].value2)/10)}${'<:gray:1240701126903599187>'.repeat(10-((info[1].value2)/10))} *${info[1].value2}%*`,
+                                    name: `降雨機率 : `,
+                                    value: `${'<:blue:1240696276111196222>'.repeat((info[1].value2)/10)}${'<:gray:1240701126903599187>'.repeat(10-((info[1].value2)/10))} *${info[1].value2}%*`,
                                 },
                             ],
                         },
                         {
                             type: 'rich',
-                            title: `夜間 *18:00 ~ 24:00*`,
-                            description: `${(info[0].value3)}`,
+                            title: `${FormatDataTimeInfo(timeinfo3)}`,
+                            description: `${info[0].value3}`,
                             color: 0x000080,
                             thumbnail: {
                                 url: infodescription[2].valueimage
                             },
                             fields: [
                                 {
-                                    "name": `最高${info[4].value3}℃ 最低${info[2].value3}℃`,
-                                    "value": `*${info[3].value3}*`,
+                                    name: `最高${info[4].value3}℃ 最低${info[2].value3}℃`,
+                                    value: `*${info[3].value3}*`,
                                 },
                                 {
-                                    "name": `降雨機率 : `,
-                                    "value": `${'<:blue:1240696276111196222>'.repeat((info[1].value3)/10)}${'<:gray:1240701126903599187>'.repeat(10-((info[1].value3)/10))} *${info[1].value3}%*`,
+                                    name: `降雨機率 : `,
+                                    value: `${'<:blue:1240696276111196222>'.repeat((info[1].value3)/10)}${'<:gray:1240701126903599187>'.repeat(10-((info[1].value3)/10))} *${info[1].value3}%*`,
                                 },
-         
                             ],
                         }
                     ]
