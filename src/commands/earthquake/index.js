@@ -72,7 +72,7 @@ export const action = async(ctx) => {
                   inline: true
                 },
                 {
-                  name: `震央深度 ${values[1].image}`,
+                  name: `地震深度 ${values[1].image}`,
                   value: `> ${depth}公里\n> ${values[1].level}`,
                   inline: true
                 },
