@@ -400,6 +400,11 @@ client.once('ready', () => {
                                 console.log(`result${i+1} : ${error}`);
                             }
                         }
+                        areatable.sort((a, b) => {
+                            const intensityA = parseFloat(a.AreaIntensity.match(/\d+/)[0]);
+                            const intensityB = parseFloat(b.AreaIntensity.match(/\d+/)[0]);
+                            return intensityA - intensityB;
+                        });
                         values[2] = IntensityLevel(areatable[index-1].AreaIntensity);
                         console.log(areatable);
                         let newfield = {name: `最大震度 ${values[2].image}`,value: `> ${areatable[index-1].AreaIntensity}\n> ${values[2].level}`,inline: true};
