@@ -28,7 +28,7 @@ export const IntensityLevel = (intensity) => {
     if(intensity.includes('0')) return {level: '無感', image: ':white_circle:', color: 0xFFFFFF};
     else if(intensity.includes('1')) return {level: '微震', image: ':white_circle:', color: 0xFFFFFF};//白
     else if(intensity.includes('2')) return {level: '輕震', image: ':blue_circle:', color: 0x0000FF};//藍
-    else if(intensity.includes('3')) return {level: ':弱震', image: ':green_circle:', color: 0x00FF00};//綠
+    else if(intensity.includes('3')) return {level: '弱震', image: ':green_circle:', color: 0x00FF00};//綠
     else if(intensity.includes('4')) return {level: '中震', image: ':yellow_circle:', color: 0xFFD700};//黃
     else if(intensity.includes('5弱')) return {level: '強震', image: ':orange_circle:', color: 0xFFA500};//橘
     else if(intensity.includes('5強')) return {level: '強震', image: ':orange_circle:', color: 0xFFA500};//橘
@@ -77,7 +77,7 @@ export const action = async(ctx) => {
                   inline: true
                 },
             ];
-            for(let i=0; i<20; i++){
+            for(let i=0; i<30; i++){
                 try{
                     let area = data.records.Earthquake[0].Intensity.ShakingArea[i].AreaDesc;
                     console.log(`result${i+1} : ${area}`);
@@ -89,6 +89,11 @@ export const action = async(ctx) => {
                     console.log(`result${i+1} : ${error}`);
                 }
             }
+            areatable.sort((a, b) => {
+                const intensityA = parseFloat(a.AreaIntensity.match(/\d+/)[0]);
+                const intensityB = parseFloat(b.AreaIntensity.match(/\d+/)[0]);
+                return intensityA - intensityB;
+            });
             values[2] = IntensityLevel(areatable[index-1].AreaIntensity);
             console.log(areatable);
             let newfield = {name: `最大震度 ${values[2].image}`,value: `> ${areatable[index-1].AreaIntensity}\n> ${values[2].level}`,inline: true};
