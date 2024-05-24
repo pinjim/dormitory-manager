@@ -78,11 +78,15 @@ export const action = async(ctx) => {
                 },
             ];
             for(let i=0; i<20; i++){
-                let area = data.records.Earthquake[0].Intensity.ShakingArea[i].AreaDesc;
-                console.log(`result${i+1} : ${area}`);
-                if(area.includes('最大震度')) {
-                    areatable[index] = report.Intensity.ShakingArea[i];
-                    index += 1;
+                try{
+                    let area = data.records.Earthquake[0].Intensity.ShakingArea[i].AreaDesc;
+                    console.log(`result${i+1} : ${area}`);
+                    if(area.includes('最大震度')) {
+                        areatable[index] = report.Intensity.ShakingArea[i];
+                        index += 1;
+                }
+                }catch(error){
+                    console.log(`result${i+1} : ${error}`);
                 }
             }
             values[2] = IntensityLevel(areatable[index-1].AreaIntensity);
