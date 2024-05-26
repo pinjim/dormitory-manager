@@ -6,7 +6,6 @@ export const command = new SlashCommandBuilder()
     .setName('更新')
     .setDescription('更新值日排程表');
 
-const ctxTime = new Date();
 const days = ['週一', '週二', '週三', '週四', '週五', '週六', '週日'];
     
 export const shuffle = (array) => {
@@ -40,11 +39,12 @@ export const RefreshMemberList = async() =>{
 }
 
 export const action = async (ctx) => {
+    const ctxTime = new Date();
     await RefreshMemberList();
     const MembersOnDuty = GetMembersOnDuty();
     console.log('更新功能讀取到的名單 :');
     console.log(MembersOnDuty);
-    const dateinfo = GetDateInfo();
+    const dateinfo = GetDateInfo(ctxTime);
     await ctx.reply({
         embeds: [
             {
