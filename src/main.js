@@ -17,7 +17,6 @@ const appStore = useAppStore()
 appStore.client = client
 loadEvents()
 
-const ctxTime = new Date();
 const days = ['週一', '週二', '週三', '週四', '週五', '週六', '週日'];
 
 export const GetMembersOnDuty = () => {
@@ -89,6 +88,7 @@ client.once('ready', () => {
     let fieldvalue;
     let counter = 1;
     setInterval(async () => {
+        const ctxTime = new Date();
         const currentTime = new Date();
         let consoleHour = currentTime.getHours();
         let consoleMinute = currentTime.getMinutes();
@@ -106,7 +106,7 @@ client.once('ready', () => {
             const MembersOnDuty = GetMembersOnDuty();
             console.log('自動更新功能讀取到的名單 :');
             console.log(MembersOnDuty);
-            const dateinfo = GetDateInfo();
+            const dateinfo = GetDateInfo(ctxTime);
             if (channels[0]) {
                 channels[0].send({
                 embeds: [
