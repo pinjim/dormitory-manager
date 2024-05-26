@@ -5,7 +5,6 @@ export const command = new SlashCommandBuilder()
     .setName('排程')
     .setDescription('查看這週的排程');
 
-const ctxTime = new Date();
 const days = ['週一', '週二', '週三', '週四', '週五', '週六', '週日'];
 
 export const GetDateInfo = (ctxTime) => {
@@ -47,6 +46,7 @@ export const GetDateInfo = (ctxTime) => {
 }
 
 export const action = async (ctx) => {
+    const ctxTime = new Date();
     const MembersOnDuty = GetMembersOnDuty();
     console.log('排程功能讀取到的名單 : ');
     console.log(MembersOnDuty);
