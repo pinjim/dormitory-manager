@@ -31,8 +31,8 @@ export const command = new SlashCommandBuilder()
 export const action = async (ctx) => {
     const fs = require('fs').promises;
     const filePath = 'src/commands/members.txt';
-    const dateinfo = GetDateInfo();
     const ctxTime = new Date();
+    const dateinfo = GetDateInfo(ctxTime);
     const days = ['週一', '週二', '週三', '週四', '週五', '週六', '週日'];
     let MembersOnDuty = GetMembersOnDuty();
     let index1 = ctx.options.getInteger('member1');
