@@ -8,7 +8,7 @@ export const command = new SlashCommandBuilder()
 const ctxTime = new Date();
 const days = ['週一', '週二', '週三', '週四', '週五', '週六', '週日'];
 
-export const GetDateInfo = () => {
+export const GetDateInfo = (ctxTime) => {
     const currentDayIndex = ctxTime.getDay();
     const daysInWeek = [];
     const date = new Date(ctxTime);
@@ -50,7 +50,7 @@ export const action = async (ctx) => {
     const MembersOnDuty = GetMembersOnDuty();
     console.log('排程功能讀取到的名單 : ');
     console.log(MembersOnDuty);
-    const dateinfo = GetDateInfo();
+    const dateinfo = GetDateInfo(ctxTime);
     await ctx.reply({
         embeds: [
             {
