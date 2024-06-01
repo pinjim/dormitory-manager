@@ -80,7 +80,7 @@ client.once('ready', () => {
     });
     let channels = [];
                                             /* 目標伺服器租屋聊天室     測試伺服器測試聊天室 */ 
-    channels[0] = client.channels.cache.get(/*'1099675393335763107'*/'1043818575548391519');
+    channels[0] = client.channels.cache.get('1099675393335763107'/*'1043818575548391519'*/);
     channels[1] = client.channels.cache.get('1242787299511500840');
     const roleID = '1147921909091156009';
     let titlecontent;
