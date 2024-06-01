@@ -19,8 +19,8 @@ export const action = async (ctx) => {
     let publicfee = Math.round(fee1 * 0.6/7);
     let sfjroom = Math.round(fee1 * 0.1);
     let sfsroom = Math.round(fee1 * 0.3);
-    let tfbroom1 = Math.round(fee2 * 0.15);
-    let tfbroom2 = Math.round(fee2 * 0.15);
+    let tfbroom1 = Math.round(fee2 * 0.3 * 0.7);
+    let tfbroom2 = Math.round(fee2 * 0.3 * 0.3);
     let tfsroom = Math.round(fee2 * 0.2);
     let ffbroom = Math.round(fee2 * 0.3);
     let ffsroom = Math.round(fee2 * 0.2);
@@ -57,11 +57,11 @@ export const action = async (ctx) => {
                     },
                     {
                         "name": `**黃品鈞**`,
-                        "value": `(三樓大間/2 + 公用電)\t*${tfbroom1} + ${publicfee} ≒ ${tfbroom1+publicfee}*`,
+                        "value": `(三樓大間*0.7 + 公用電)\t*${tfbroom1} + ${publicfee} ≒ ${tfbroom1+publicfee}*`,
                     },
                     {
                         "name": `**吳宇璿**`,
-                        "value": `(三樓大間/2 + 公用電)\t*${tfbroom2} + ${publicfee} ≒ ${tfbroom2+publicfee}*`,
+                        "value": `(三樓大間*0.3 + 公用電)\t*${tfbroom2} + ${publicfee} ≒ ${tfbroom2+publicfee}*`,
                     },
                     {
                         "name": `**李臸宇**`,
