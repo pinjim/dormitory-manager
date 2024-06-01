@@ -488,7 +488,7 @@ client.on('messageCreate', message => {
         message.delete();
         message.channel.send(`${message.content.substring(8)}`);
     }
-    else if(!admin.includes(message.author.id)){ 
+    else if(message.content.includes(prefix) && !admin.includes(message.author.id)){ 
         message.reply(`您沒有權限進行此互動。`);
     }
 });
