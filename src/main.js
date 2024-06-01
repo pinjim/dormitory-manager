@@ -8,11 +8,18 @@ import { GetDateInfo } from '@/commands/schedule'
 import fs from 'fs';
 import { GetWeatherData, ProcessWeatherData, FormatDataTimeInfo } from './commands/weather'
 import { MagnitudeLevel, DepthLevel, IntensityLevel } from './commands/earthquake'
+import { channel } from 'diagnostics_channel'
 
 vueInit()
 dotenv.config()
 loadCommands()
-const client = new Client({ intents: [GatewayIntentBits.Guilds] })
+const client = new Client({  
+    intents: [
+        GatewayIntentBits.Guilds, 
+        GatewayIntentBits.GuildMessages, 
+        GatewayIntentBits.MessageContent 
+    ]  
+})
 const appStore = useAppStore()
 appStore.client = client
 loadEvents()
@@ -74,6 +81,15 @@ export const SaveEarthQuakeID = (id) => {
     }
 }
 
+export const CounterFormat = (counterMinutes) => {
+    const counterHours = Math.floor(counterMinutes/60);
+    const counterDays = Math.floor(counterHours/24);
+    if(counterMinutes >= 60){
+        if (counterHours >= 24) return `${counterDays}天${counterHours%24}小時${counterMinutes%60}分鐘`;
+        else return `${counterHours}小時${counterMinutes%60}分鐘`;
+    }else return `${counterMinutes}分鐘`;
+}
+let counter = 0;
 client.once('ready', () => { 
     client.user.setPresence({
         status: 'idle',
@@ -86,7 +102,6 @@ client.once('ready', () => {
     let titlecontent;
     let fieldcontent;
     let fieldvalue;
-    let counter = 1;
     setInterval(async () => {
         const ctxTime = new Date();
         const currentTime = new Date();
@@ -97,8 +112,9 @@ client.once('ready', () => {
         const month = currentTime.getMonth() + 1;
         const date = currentTime.getDate();
         const dayOfWeek = currentTime.getDay();
-        console.log(`\n今天是${year}/${month}/${date} 周${dayOfWeek}，程式已運行${counter}分鐘。\n自動發訊目標時間 : 00:00 , 目前時間 : ${consoleHour.toString().padStart(2, '0')}:${consoleMinute.toString().padStart(2, '0')}\n排程表更新狀態 : ${NewWeekCheck}`);
         counter+=1;
+        console.log(`\n今天是${year}/${month}/${date} 周${dayOfWeek}\n程式已運行${CounterFormat(counter)}\n自動發訊目標時間 : 00:00 , 目前時間 : ${consoleHour.toString().padStart(2, '0')}:${consoleMinute.toString().padStart(2, '0')}\n排程表更新狀態 : ${NewWeekCheck}`);
+        
         if (dayOfWeek === 1 && NewWeekCheck === false) {
             NewWeekCheck = 'true';
             console.log(`偵測到換周，已更新排程表，目前排程表更新狀態 : ${NewWeekCheck}`);
@@ -448,6 +464,33 @@ client.once('ready', () => {
                 console.error(error);
             }
     }, 5000);
-    });
+});
+
+client.on('messageCreate', message => {
+    const admin = ['631743756147752961','777508877276413952'];
+    if(message.author.bot) return;
+    const prefix = '!';
+    if(message.content.includes(prefix+`status`) && admin.includes(message.author.id)){
+        const currentTime = new Date();
+        const year = currentTime.getFullYear();
+        const month = currentTime.getMonth() + 1;
+        const date = currentTime.getDate();
+        const dayOfWeek = currentTime.getDay();
+        let consoleHour = currentTime.getHours();
+        let consoleMinute = currentTime.getMinutes();
+        try{
+            message.reply(`今天是${year}/${month}/${date} 周${dayOfWeek}\n程式已運行${CounterFormat(counter)}\n自動發訊目標時間 : 00:00 , 目前時間 : ${consoleHour.toString().padStart(2, '0')}:${consoleMinute.toString().padStart(2, '0')}\n排程表更新狀態 : ${GetNewWeekCheck()}`);
+        }catch(error){
+            message.reply(`無法取得狀態\nErrCode : ${error}`);
+        }
+    }
+    if(message.content.includes(prefix+`repeat`) && admin.includes(message.author.id)){
+        message.delete();
+        message.channel.send(`${message.content.substring(8)}`);
+    }
+    else if(!admin.includes(message.author.id)){ 
+        message.reply(`您沒有權限進行此互動。`);
+    }
+});
 
 client.login(process.env.TOKEN)
