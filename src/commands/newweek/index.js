@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { GetDateInfo } from '../schedule';
-import { GetMembersOnDuty } from '../../main';
+import { GetMembersOnDuty, GetMemberOnPunish, GetPunishStatus } from '../../main';
 
 export const command = new SlashCommandBuilder()
     .setName('更新')
@@ -45,55 +45,71 @@ export const action = async (ctx) => {
     console.log('更新功能讀取到的名單 :');
     console.log(MembersOnDuty);
     const dateinfo = GetDateInfo(ctxTime);
-    await ctx.reply({
-        embeds: [
-            {
-                type: 'rich',
-                title: `排程表已更新。\n本週排程表 (${dateinfo[0]} ~ ${dateinfo[6]})`,
-                description: '',
-                color: 0xFF0000,
-                fields: [
-                    {
-                        "name": `${dateinfo[0]}  ${days[0]}`,
-                        "value": `${MembersOnDuty[0]}`,
-                        "inline": true
-                    },
-                    {
-                        "name": `${dateinfo[1]} ${days[1]}`,
-                        "value": `${MembersOnDuty[1]}`,
-                        "inline": true
-                    },
-                    {
-                        "name": `${dateinfo[2]} ${days[2]}`,
-                        "value": `無`,
-                        "inline": true
-                    },
-                    {
-                        "name": `${dateinfo[3]} ${days[3]}`,
-                        "value": `${MembersOnDuty[2]}`,
-                        "inline": true
-                    },
-                    {
-                        "name": `${dateinfo[4]} ${days[4]}`,
-                        "value": `${MembersOnDuty[3]}`,
-                        "inline": true
-                    },
-                    {
-                        "name": `${dateinfo[5]} ${days[5]}`,
-                        "value": `${MembersOnDuty[4]}`,
-                        "inline": true
-                    },
-                    {
-                        "name": `${dateinfo[6]} ${days[6]}`,
-                        "value": `無`,
-                        "inline": true
-                    },
-                ],
-                timestamp: ctxTime.toISOString(),
-                footer: {
-                    text: '排程表更新為自動產生，人員排序可能無法配合實際情形。\n若發生無法配合的狀況，請使用“/更新”指令來手動刷新排程表。\npowered by @pinjim0407'
+    let punishstatus = GetPunishStatus();
+    let memberonpunish = GetMemberOnPunish();
+    if(punishstatus === true){
+        await ctx.reply({
+            embeds: [
+                {
+                    type: 'rich',
+                    title: `由於${memberonpunish}處於受罰狀態，故無法更新排程。`,
+                    description: '',
+                    color: 0xFF0000,
                 }
-            }
-        ]
-    });
+            ]
+        });
+    }
+    else{
+        await ctx.reply({  
+            embeds: [
+                {
+                    type: 'rich',
+                    title: `排程表已更新。\n本週排程表 (${dateinfo[0]} ~ ${dateinfo[6]})`,
+                    description: '',
+                    color: 0xFF0000,
+                    fields: [
+                        {
+                            "name": `${dateinfo[0]}  ${days[0]}`,
+                            "value": `${MembersOnDuty[0]}`,
+                            "inline": true
+                        },
+                        {
+                            "name": `${dateinfo[1]} ${days[1]}`,
+                            "value": `${MembersOnDuty[1]}`,
+                            "inline": true
+                        },
+                        {
+                            "name": `${dateinfo[2]} ${days[2]}`,
+                            "value": `無`,
+                            "inline": true
+                        },
+                        {
+                            "name": `${dateinfo[3]} ${days[3]}`,
+                            "value": `${MembersOnDuty[2]}`,
+                            "inline": true
+                        },
+                        {
+                            "name": `${dateinfo[4]} ${days[4]}`,
+                            "value": `${MembersOnDuty[3]}`,
+                            "inline": true
+                        },
+                        {
+                            "name": `${dateinfo[5]} ${days[5]}`,
+                            "value": `${MembersOnDuty[4]}`,
+                            "inline": true
+                        },
+                        {
+                            "name": `${dateinfo[6]} ${days[6]}`,
+                            "value": `無`,
+                            "inline": true
+                        },
+                    ],
+                    timestamp: ctxTime.toISOString(),
+                    footer: {
+                        text: '排程表更新為自動產生，人員排序可能無法配合實際情形。\n若發生無法配合的狀況，請使用“/更新”指令來手動刷新排程表。\npowered by @pinjim0407'
+                    }
+                }
+            ]
+        });
+    }
 };

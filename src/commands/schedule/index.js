@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from 'discord.js';
-import { GetMembersOnDuty } from '../../main';
+import { GetMembersOnDuty, GetMemberOnPunish, GetPunishStatus } from '../../main';
 
 export const command = new SlashCommandBuilder()
     .setName('排程')
@@ -51,60 +51,122 @@ export const action = async (ctx) => {
     console.log('排程功能讀取到的名單 : ');
     console.log(MembersOnDuty);
     const dateinfo = GetDateInfo(ctxTime);
-    await ctx.reply({
-        embeds: [
-            {
-                type: 'rich',
-                title: `本週排程表 (${dateinfo[0]} ~ ${dateinfo[6]})`,
-                description: '',
-                color: 0x00ff33,
-                fields: [
-                    {
-                        "name": `${dateinfo[0]}  ${days[0]}`,
-                        "value": `${MembersOnDuty[0]}`,
-                        "inline": true
+    let punishstatus = GetPunishStatus();
+    let memberonpunish = GetMemberOnPunish();
+    if(punishstatus === true){
+        await ctx.reply({
+            embeds: [
+                {
+                    type: 'rich',
+                    title: `本週排程表 (${dateinfo[0]} ~ ${dateinfo[6]})`,
+                    description: '',
+                    color: 0x00ff33,
+                    fields: [
+                        {
+                            "name": `${dateinfo[0]}  ${days[0]}`,
+                            "value": `${memberonpunish}`,
+                            "inline": true
+                        },
+                        {
+                            "name": `${dateinfo[1]} ${days[1]}`,
+                            "value": `${memberonpunish}`,
+                            "inline": true
+                        },
+                        {
+                            "name": `${dateinfo[2]} ${days[2]}`,
+                            "value": `無`,
+                            "inline": true
+                        },
+                        {
+                            "name": `${dateinfo[3]} ${days[3]}`,
+                            "value": `${memberonpunish}`,
+                            "inline": true
+                        },
+                        {
+                            "name": `${dateinfo[4]} ${days[4]}`,
+                            "value": `${memberonpunish}`,
+                            "inline": true
+                        },
+                        {
+                            "name": `${dateinfo[5]} ${days[5]}`,
+                            "value": `${memberonpunish}`,
+                            "inline": true
+                        },
+                        {
+                            "name": `${dateinfo[6]} ${days[6]}`,
+                            "value": `無`,
+                            "inline": true
+                        },
+                    ],
+                    image: {
+                        "url": `https://media.discordapp.net/attachments/1060629545398575255/1230184478132146287/image.png?ex=66326593&is=661ff093&hm=b5ecf75722780e2f53e3e42a9518429ac0883b29bf0de45bcde8f23fd83e6d05&=&format=webp&quality=lossless&width=902&height=478`,
+                        "height": 0,
+                        "width": 0
                     },
-                    {
-                        "name": `${dateinfo[1]} ${days[1]}`,
-                        "value": `${MembersOnDuty[1]}`,
-                        "inline": true
-                    },
-                    {
-                        "name": `${dateinfo[2]} ${days[2]}`,
-                        "value": `無`,
-                        "inline": true
-                    },
-                    {
-                        "name": `${dateinfo[3]} ${days[3]}`,
-                        "value": `${MembersOnDuty[2]}`,
-                        "inline": true
-                    },
-                    {
-                        "name": `${dateinfo[4]} ${days[4]}`,
-                        "value": `${MembersOnDuty[3]}`,
-                        "inline": true
-                    },
-                    {
-                        "name": `${dateinfo[5]} ${days[5]}`,
-                        "value": `${MembersOnDuty[4]}`,
-                        "inline": true
-                    },
-                    {
-                        "name": `${dateinfo[6]} ${days[6]}`,
-                        "value": `無`,
-                        "inline": true
-                    },
-                ],
-                image: {
-                    "url": `https://media.discordapp.net/attachments/1060629545398575255/1230184478132146287/image.png?ex=66326593&is=661ff093&hm=b5ecf75722780e2f53e3e42a9518429ac0883b29bf0de45bcde8f23fd83e6d05&=&format=webp&quality=lossless&width=902&height=478`,
-                    "height": 0,
-                    "width": 0
-                },
-                timestamp: ctxTime.toISOString(),
-                footer: {
-                    text: '排程表日期為自動產生，可能不符合實際日期。\n若不符合實際情形，請以現實的日期為準。\npowered by @pinjim0407'
+                    timestamp: ctxTime.toISOString(),
+                    footer: {
+                        text: `由於${memberonpunish}上週未完成值日工作，\n作為懲罰由他負責倒垃圾一周。\npowered by @pinjim0407`
+                    }
                 }
-            }
-        ]
-    });
+            ]
+        });
+    }
+    else{
+        await ctx.reply({
+            embeds: [
+                {
+                    type: 'rich',
+                    title: `本週排程表 (${dateinfo[0]} ~ ${dateinfo[6]})`,
+                    description: '',
+                    color: 0x00ff33,
+                    fields: [
+                        {
+                            "name": `${dateinfo[0]}  ${days[0]}`,
+                            "value": `${MembersOnDuty[0]}`,
+                            "inline": true
+                        },
+                        {
+                            "name": `${dateinfo[1]} ${days[1]}`,
+                            "value": `${MembersOnDuty[1]}`,
+                            "inline": true
+                        },
+                        {
+                            "name": `${dateinfo[2]} ${days[2]}`,
+                            "value": `無`,
+                            "inline": true
+                        },
+                        {
+                            "name": `${dateinfo[3]} ${days[3]}`,
+                            "value": `${MembersOnDuty[2]}`,
+                            "inline": true
+                        },
+                        {
+                            "name": `${dateinfo[4]} ${days[4]}`,
+                            "value": `${MembersOnDuty[3]}`,
+                            "inline": true
+                        },
+                        {
+                            "name": `${dateinfo[5]} ${days[5]}`,
+                            "value": `${MembersOnDuty[4]}`,
+                            "inline": true
+                        },
+                        {
+                            "name": `${dateinfo[6]} ${days[6]}`,
+                            "value": `無`,
+                            "inline": true
+                        },
+                    ],
+                    image: {
+                        "url": `https://media.discordapp.net/attachments/1060629545398575255/1230184478132146287/image.png?ex=66326593&is=661ff093&hm=b5ecf75722780e2f53e3e42a9518429ac0883b29bf0de45bcde8f23fd83e6d05&=&format=webp&quality=lossless&width=902&height=478`,
+                        "height": 0,
+                        "width": 0
+                    },
+                    timestamp: ctxTime.toISOString(),
+                    footer: {
+                        text: '排程表日期為自動產生，可能不符合實際日期。\n若不符合實際情形，請以現實的日期為準。\npowered by @pinjim0407'
+                    }
+                }
+            ]
+        });
+    }
 };
