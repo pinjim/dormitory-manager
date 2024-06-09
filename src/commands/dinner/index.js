@@ -45,7 +45,7 @@ export const action = async (ctx) => {
     const target = ctx.options.getString('search');
     let index = null;
     if(target != null){
-        for(let i=0; i<restaurants.length; i++){
+        for(let i=0; i<restaurants.length-1; i++){
             if(restaurants[i].name.includes(target)){
                 index = i;
                 break;
@@ -69,41 +69,49 @@ export const action = async (ctx) => {
         }
     }
     else{
-        index = Math.floor(Math.random() * restaurants.length)-1;
-        if(platform != 0){
-            do{
-                index = Math.floor(Math.random() * restaurants.length)-1;
-            }while(restaurants[index].platform != platform);
+        try{
+            index = Math.floor(Math.random() * restaurants.length-1);
+            if(platform != 0){
+                do{
+                    index = Math.floor(Math.random() * restaurants.length-1);
+                }while(restaurants[index].platform != platform);
+            }
+        }catch(error){
+            console.log(error);
         }
     }
-    await ctx.reply({
-        embeds: [
-        {
-            type: 'rich',
-            title: `${restaurants[index].name}`,
-            description: '',
-            color: restaurants[index].color,
-            thumbnail: {
-                url: restaurants[index].image
-            },
-            fields: [
-                {
-                    "name": ``,
-                    "value": `餐廳評價 **${restaurants[index].star}**`,
+    try{
+        await ctx.reply({
+            embeds: [
+            {
+                type: 'rich',
+                title: `${restaurants[index].name}`,
+                description: '',
+                color: restaurants[index].color,
+                thumbnail: {
+                    url: restaurants[index].image
                 },
-                {
-                    "name": ``,
-                    "value": `外送速度 **${restaurants[index].speed}**`,
-                },
-                {
-                    "name": ``,
-                    "value": `${restaurants[index].url}`,
+                fields: [
+                    {
+                        "name": ``,
+                        "value": `餐廳評價 **${restaurants[index].star}**`,
+                    },
+                    {
+                        "name": ``,
+                        "value": `外送速度 **${restaurants[index].speed}**`,
+                    },
+                    {
+                        "name": ``,
+                        "value": `${restaurants[index].url}`,
+                    }
+                ],
+                timestamp: ctxTime.toISOString(),
+                footer: {
+                    text: 'powered by @pinjim0407'
                 }
-            ],
-            timestamp: ctxTime.toISOString(),
-            footer: {
-                text: 'powered by @pinjim0407'
-            }
-        }]
-    });
+            }]
+        });
+    }catch(error){
+        await ctx.reply(`指令出現錯誤，請嘗試再次使用指令。\n[error code] : `+error);
+    }
 }
