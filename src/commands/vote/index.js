@@ -33,8 +33,15 @@ export const action = async (ctx) => {
     let length;
     let voteresult = [];
     let privatevalue = false;
-    if (privateset === 0) privatevalue = true;
-    else if (privateset === 1) privatevalue = false;
+    let descriptioncontent = '';
+    if (privateset === 0){
+        privatevalue = true;
+        descriptioncontent = '∙ 所有人都可以進行投票\n∙ 此投票不會公開成員選擇的選項\n∙ 每位成員只能選擇一個選項\n∙ 不能改投其他選項\n∙ 投票將在發起五分鐘後自動結算';
+    }
+    else if (privateset === 1){
+        privatevalue = false;
+        descriptioncontent = '∙ 所有人都可以進行投票\n∙ 每位成員只能選擇一個選項\n∙ 不能改投其他選項\n∙ 投票將在發起五分鐘後自動結算';
+    }
     //自訂選項
     if (options != null) {
         option = options.split(" ");
@@ -89,6 +96,7 @@ export const action = async (ctx) => {
             .setLabel(`${option[1]}`)
             .setStyle(ButtonStyle.Danger);
     }
+
     row = new ActionRowBuilder()
         .addComponents(buttons);
     const message = await ctx.reply({
@@ -100,7 +108,7 @@ export const action = async (ctx) => {
                 },
                 type: 'rich',
                 title: `**${name}**`,
-                description: '∙ 所有人都可以進行投票\n∙ 每位成員只能選擇一個選項\n∙ 不能改投其他選項\n∙ 投票將在發起五分鐘後自動結算',
+                description: descriptioncontent,
                 color: 0x00FFFF,
                 timestamp: ctxTime.toISOString(),
                 footer: {
@@ -113,25 +121,29 @@ export const action = async (ctx) => {
 
     const collectorFilter = async(interaction) => {
         if (votedUsers.has(interaction.user.id)) {
-            await interaction.reply({ 
-                embeds: [
-                {
-                    author: {
-                        name: interaction.user.username,
-                        iconURL: interaction.user.avatarURL()
-                    },
-                    type: 'rich',
-                    title: `你已經投過票了`,
-                    description: ``,
-                    color: 0xFF0000,
-                    timestamp: ctxTime.toISOString(),
-                    footer: {
-                        text: 'powered by @pinjim0407'
-                    }
-                }],
-                ephemeral: true
-            });
-            return false;
+            try{
+                await interaction.reply({ 
+                    embeds: [
+                    {
+                        author: {
+                            name: interaction.user.username,
+                            iconURL: interaction.user.avatarURL()
+                        },
+                        type: 'rich',
+                        title: `你已經投過票了`,
+                        description: ``,
+                        color: 0xFF0000,
+                        timestamp: ctxTime.toISOString(),
+                        footer: {
+                            text: 'powered by @pinjim0407'
+                        }
+                    }],
+                    ephemeral: true
+                });
+                return false;
+            }catch(error){
+                console.log(error);
+            }    
         }
         return true;
     };
