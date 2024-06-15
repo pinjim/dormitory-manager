@@ -40,7 +40,7 @@ export const IntensityLevel = (intensity) => {
 
 export const action = async(ctx) => {
     try {
-        const response = await fetch(`https://opendata.cwa.gov.tw/api/v1/rest/datastore/E-A0015-001?Authorization=CWB-427B7265-DE60-4C1F-8AD0-4E7509C741D1&format=JSON`);
+        const response = await fetch(`https://opendata.cwa.gov.tw/api/v1/rest/datastore/E-A0015-001?Authorization=CWB-427B7265-DE60-4C1F-8AD0-4E7509C741D1&format=JSON&limit=1`);
         const data = await response.json();
 
         if (data.success === 'true') {
