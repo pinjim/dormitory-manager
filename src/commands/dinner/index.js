@@ -112,6 +112,6 @@ export const action = async (ctx) => {
             }]
         });
     }catch(error){
-        await ctx.reply(`指令出現錯誤，請嘗試再次使用指令。\n[error code] : `+error);
+        await ctx.reply(`指令出現錯誤，請嘗試再次使用指令。\n`+error);
     }
 }
