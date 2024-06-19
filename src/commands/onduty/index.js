@@ -144,7 +144,7 @@ export const action = async (ctx) => {
             });
         } catch (error) {
             console.error(error);
-            await ctx.editReply({ content: `回報出現問題\n${errorMessages}`, embeds: [],components: [] });
+            await ctx.editReply({ content: `回報出現問題\n${error}`, embeds: [],components: [] });
         }
     });
     collector.on('end', async () => {
