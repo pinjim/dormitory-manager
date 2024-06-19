@@ -561,7 +561,7 @@ client.on('messageCreate', message => {
         try{
             message.reply(`今天是${year}/${month}/${date} 周${dayOfWeek}\n程式已運行${CounterFormat(counter)}\n自動發訊目標時間 : 00:00 , 目前時間 : ${consoleHour.toString().padStart(2, '0')}:${consoleMinute.toString().padStart(2, '0')}\n排程表更新狀態 : ${GetNewWeekCheck()}\n預定懲罰狀態 : ${GetPunishCheck()}\n成員懲罰狀態 : ${GetPunishStatus()}`);
         }catch(error){
-            message.reply(`無法取得狀態\nErrCode : ${error}`);
+            message.reply(`無法取得狀態\n${error}`);
         }
     }
     if(message.content.includes(prefix+`repeat`) && admin.includes(message.author.id)){
