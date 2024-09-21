@@ -40,47 +40,43 @@ const restaurants = [
     { name: '真味廣東粥', color: 0xFF69B4, url: '[FoodPanda](https://www.foodpanda.com.tw/restaurant/b9wm/zhen-wei-guang-dong-zhou-miao-li-jian-gong-dian)', star: '★4.8/5(1000+)', speed: '中',image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOYvdBOGZxTEB-lvlz64V8bQz8pRDUHjJRcZY9OdRRCw&s',platform: '1'},
 ];
 export const action = async (ctx) => {
-    const ctxTime = new Date();
-    const platform = ctx.options.getInteger('platform');
-    const target = ctx.options.getString('search');
-    let index = null;
-    if(target != null){
-        for(let i=0; i<restaurants.length-1; i++){
-            if(restaurants[i].name.includes(target)){
-                index = i;
-                break;
+    try{
+        const ctxTime = new Date();
+        const platform = ctx.options.getInteger('platform');
+        const target = ctx.options.getString('search');
+        let index = null;
+        if(target != null){
+            for(let i=0; i<restaurants.length-1; i++){
+                if(restaurants[i].name.includes(target)){
+                    index = i;
+                    break;
+                }
+            }
+            if(index === null){
+                await ctx.reply({
+                    embeds: [
+                        {
+                            type: 'rich',
+                            title: `沒有和關鍵字“${target}”相關的餐廳`,
+                            description: ``,
+                            timestamp: ctxTime.toISOString(),
+                            footer: {
+                                text: 'powered by @pinjim0407'
+                            }
+                        }
+                    ]
+                })
+                return 0;
             }
         }
-        if(index === null){
-            await ctx.reply({
-                embeds: [
-                    {
-                        type: 'rich',
-                        title: `沒有和關鍵字“${target}”相關的餐廳`,
-                        description: ``,
-                        timestamp: ctxTime.toISOString(),
-                        footer: {
-                            text: 'powered by @pinjim0407'
-                        }
-                    }
-                ]
-            })
-            return 0;
-        }
-    }
-    else{
-        try{
+        else{
             index = Math.floor(Math.random() * restaurants.length-1);
             if(platform != 0){
                 do{
                     index = Math.floor(Math.random() * restaurants.length-1);
                 }while(restaurants[index].platform != platform);
             }
-        }catch(error){
-            console.log(error);
         }
-    }
-    try{
         await ctx.reply({
             embeds: [
             {
@@ -112,6 +108,16 @@ export const action = async (ctx) => {
             }]
         });
     }catch(error){
-        await ctx.reply(`指令出現錯誤，請嘗試再次使用指令。\n`+error);
+        console.log(error);
+        await ctx.reply({
+            embeds: [
+                {
+                    type: 'rich',
+                    title: `晚餐指令執行錯誤`,
+                    description: `${error}`,
+                    color: 0xFF0000,
+                }
+            ]
+        });
     }
 }
