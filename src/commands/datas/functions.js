@@ -147,7 +147,7 @@ export const SetSchedule = async(dayOfWeek) =>{
         else if(dayOfWeek === 0 || dayOfWeek === 5|| dayOfWeek === 6) offset=3;
         for(let i=0; i<offset; i++){
             index-=1;
-            if(index===0) index=5;
+            if(index<=0) index=5;
         }
         console.log(`格式化後的索引值 : `);
         console.log(index);
