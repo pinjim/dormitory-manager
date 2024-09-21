@@ -1,4 +1,5 @@
 import { SlashCommandBuilder } from 'discord.js';
+import { GetMemberList, GetMemberRole } from '../datas/functions';
 import fs from 'fs';
 
 export const command = new SlashCommandBuilder()
@@ -25,12 +26,12 @@ export const command = new SlashCommandBuilder()
             .setRequired(false));
 
 const ctxTime = new Date();
-const memberlist = [`左仲凱`,`黃智祥`,`蘇翊嘉`,`黃品鈞`,`李臸宇`,`張桂嘉`];
+const memberlist = GetMemberList();
 
 export const GetFeeIndex = () => {
     let index;
     try {
-        const data = fs.readFileSync('src/commands/feeindex.txt', 'utf-8');
+        const data = fs.readFileSync('src/commands/datas/feeindex.txt', 'utf-8');
         index = data.trim();
     } catch (error) {
         console.error('讀取確認狀態時發生錯誤：', error);
@@ -58,7 +59,7 @@ export const GetFeeIndex = () => {
 export const SaveFeeIndex = (data) => {
     const formateddata = data.toString();
     try {
-        fs.writeFileSync('src/commands/feeindex.txt', formateddata, 'utf-8');
+        fs.writeFileSync('src/commands/datas/feeindex.txt', formateddata, 'utf-8');
     } catch (error) {
         console.error('寫入確認狀態時發生錯誤：', error);
     }
@@ -89,28 +90,28 @@ export const WaterFee = (fee) => {
                         "value": ``,
                     },
                     {
-                        "name": `**李臸宇**`,
-                        "value": `(20%) *${yuu}*`,
+                        "name": ``,
+                        "value": `**<@&${GetMemberRole(`李臸宇`)}>**\n> (20%) *${yuu}*`,
                     },
                     {
-                        "name": `**黃智祥**`,
-                        "value": `(18%) *${dama}*`,
+                        "name": ``,
+                        "value": `**<@&${GetMemberRole(`黃智祥`)}>**\n> (18%) *${dama}*`,
                     },
                     {
-                        "name": `**張桂嘉**`,
-                        "value": `(17%) *${ironmusk}*`,
+                        "name": ``,
+                        "value": `**<@&${GetMemberRole(`張桂嘉`)}>**\n> (17%) *${ironmusk}*`,
                     },
                     {
-                        "name": `**左仲凱**`,
-                        "value": `(15%) *${defaultfee}*`,
+                        "name": ``,
+                        "value": `**<@&${GetMemberRole(`左仲凱`)}>**\n> (15%) *${defaultfee}*`,
                     },
                     {
-                        "name": `**蘇翊嘉**`,
-                        "value": `(15%) *${defaultfee}*`,
+                        "name": ``,
+                        "value": `**<@&${GetMemberRole(`蘇翊嘉`)}>**\n> (15%) *${defaultfee}*`,
                     },
                     {
-                        "name": `**黃品鈞**`,
-                        "value": `(15%) *${defaultfee}*`,
+                        "name": ``,
+                        "value": `**<@&${GetMemberRole(`黃品鈞`)}>**\n> (15%) *${defaultfee}*`,
                     },
                     {
                         "name": `**-------------------------------------------**`,
@@ -131,9 +132,9 @@ export const WaterFee = (fee) => {
 
 export const ElectricityFee = (fee1, fee2) => {
     let index = GetFeeIndex();
-    let publicfee = Math.round(fee1 * 0.6/6);
-    let sfjroom = Math.round(fee1 * 0.1);
-    let sfsroom = Math.round(fee1 * 0.3);
+    let publicfee = Math.round(fee1 * 0.3/6);
+    let sfjroom = Math.round(fee1 * 0.2);
+    let sfsroom = Math.round(fee1 * 0.5);
     let tfbroom = Math.round(fee2 * 0.3);
     let tfsroom = Math.round(fee2 * 0.2);
     let ffbroom = Math.round(fee2 * 0.3);
@@ -149,7 +150,7 @@ export const ElectricityFee = (fee1, fee2) => {
             {
                 type: 'rich',
                 title: `電費 ${memberlist[index]}負責繳費`,
-                description: `1/2樓 ${fee1}(公用60%、小間30%、和室10%)\n3/4樓 ${fee2}(大間30%、小間20%)\n`,
+                description: `1/2樓 ${fee1}(公用30%、小間50%、和室20%)\n3/4樓 ${fee2}(大間30%、小間20%)\n`,
                 color: color,
                 fields: [
                     {
@@ -158,31 +159,31 @@ export const ElectricityFee = (fee1, fee2) => {
                     },
                     {
                         "name": `**公用電**`,
-                        "value": `${fee1} * 0.6 / 6 ≒ ${publicfee}`,
+                        "value": `${fee1} * 0.3 / 6 ≒ ${publicfee}`,
                     },
                     {
-                        "name": `**左仲凱**`,
-                        "value": `(二樓和室 + 公用電) *${sfjroom} + ${publicfee} ≒ ${sfjroom+publicfee}*`,
+                        "name": ``,
+                        "value": `**<@&${GetMemberRole(`左仲凱`)}>**\n> (二樓和室 + 公用電) *${sfjroom} + ${publicfee} ≒ ${sfjroom+publicfee}*`,
                     },
                     {
-                        "name": `**黃智祥**`,
-                        "value": `(二樓小間 + 公用電) *${sfsroom} + ${publicfee} ≒ ${sfsroom+publicfee}*`,
+                        "name": ``,
+                        "value": `**<@&${GetMemberRole(`黃智祥`)}>**\n> (二樓小間 + 公用電) *${sfsroom} + ${publicfee} ≒ ${sfsroom+publicfee}*`,
                     },
                     {
-                        "name": `**蘇翊嘉**`,
-                        "value": `(三樓小間 + 公用電) *${tfsroom} + ${publicfee} ≒ ${tfsroom+publicfee}*`,
+                        "name": ``,
+                        "value": `**<@&${GetMemberRole(`蘇翊嘉`)}>**\n> (三樓小間 + 公用電) *${tfsroom} + ${publicfee} ≒ ${tfsroom+publicfee}*`,
                     },
                     {
-                        "name": `**黃品鈞**`,
-                        "value": `(三樓大間 + 公用電) *${tfbroom} + ${publicfee} ≒ ${tfbroom+publicfee}*`,
+                        "name": ``,
+                        "value": `**<@&${GetMemberRole(`黃品鈞`)}>**\n> (三樓大間 + 公用電) *${tfbroom} + ${publicfee} ≒ ${tfbroom+publicfee}*`,
                     },
                     {
-                        "name": `**李臸宇**`,
-                        "value": `(四樓小間 + 公用電) *${ffsroom} + ${publicfee} ≒ ${ffsroom+publicfee}*`,
+                        "name": ``,
+                        "value": `**<@&${GetMemberRole(`李臸宇`)}>**\n> (四樓小間 + 公用電) *${ffsroom} + ${publicfee} ≒ ${ffsroom+publicfee}*`,
                     },
                     {
-                        "name": `**張桂嘉**`,
-                        "value": `(四樓大間 + 公用電) *${ffbroom} + ${publicfee} ≒ ${ffbroom+publicfee}*`,
+                        "name": ``,
+                        "value": `**<@&${GetMemberRole(`張桂嘉`)}>**\n> (四樓大間 + 公用電) *${ffbroom} + ${publicfee} ≒ ${ffbroom+publicfee}*`,
                     },
                     {
                         "name": `**-------------------------------------------**`,
@@ -223,28 +224,28 @@ export const GasFee = (fee) => {
                         "value": ``,
                     },
                     {
-                        "name": `**李臸宇**`,
-                        "value": `*${defaultfee}*`,
+                        "name": ``,
+                        "value": `**<@&${GetMemberRole(`李臸宇`)}>**\n> *${defaultfee}*`,
                     },
                     {
-                        "name": `**黃智祥**`,
-                        "value": `*${defaultfee}*`,
+                        "name": ``,
+                        "value": `**<@&${GetMemberRole(`黃智祥`)}>**\n> *${defaultfee}*`,
                     },
                     {
-                        "name": `**張桂嘉**`,
-                        "value": `*${defaultfee}*`,
+                        "name": ``,
+                        "value": `**<@&${GetMemberRole(`張桂嘉`)}>**\n> *${defaultfee}*`,
                     },
                     {
-                        "name": `**左仲凱**`,
-                        "value": `*${defaultfee}*`,
+                        "name": ``,
+                        "value": `**<@&${GetMemberRole(`左仲凱`)}>**\n> *${defaultfee}*`,
                     },
                     {
-                        "name": `**蘇翊嘉**`,
-                        "value": `*${defaultfee}*`,
+                        "name": ``,
+                        "value": `**<@&${GetMemberRole(`蘇翊嘉`)}>**\n> *${defaultfee}*`,
                     },
                     {
-                        "name": `**黃品鈞**`,
-                        "value": `*${defaultfee}*`,
+                        "name": ``,
+                        "value": `**<@&${GetMemberRole(`黃品鈞`)}>**\n> *${defaultfee}*`,
                     },
                     {
                         "name": `**-------------------------------------------**`,
@@ -285,24 +286,24 @@ export const NetworkFee = (fee) => {
                         "value": ``,
                     },
                     {
-                        "name": `**李臸宇**`,
-                        "value": `*${defaultfee}*`,
+                        "name": ``,
+                        "value": `**<@&${GetMemberRole(`李臸宇`)}>**\n> *${defaultfee}*`,
                     },
                     {
-                        "name": `**黃智祥**`,
-                        "value": `*${defaultfee}*`,
+                        "name": ``,
+                        "value": `**<@&${GetMemberRole(`黃智祥`)}>**\n> *${defaultfee}*`,
                     },
                     {
-                        "name": `**張桂嘉**`,
-                        "value": `*${defaultfee}*`,
+                        "name": ``,
+                        "value": `**<@&${GetMemberRole(`張桂嘉`)}>**\n> *${defaultfee}*`,
                     },
                     {
-                        "name": `**蘇翊嘉**`,
-                        "value": `*${defaultfee}*`,
+                        "name": ``,
+                        "value": `**<@&${GetMemberRole(`蘇翊嘉`)}>**\n> *${defaultfee}*`,
                     },
                     {
-                        "name": `**黃品鈞**`,
-                        "value": `*${defaultfee}*`,
+                        "name": ``,
+                        "value": `**<@&${GetMemberRole(`黃品鈞`)}>**\n> *${defaultfee}*`,
                     },
                     {
                         "name": `**-------------------------------------------**`,
@@ -358,11 +359,12 @@ export const action = async(ctx) => {
                 break;
         }
     }catch(error){
+        console.log(error);
         await ctx.reply({
             embeds: [
                 {
                     type: 'rich',
-                    title: `帳單計算錯誤`,
+                    title: `帳單指令執行錯誤`,
                     description: `${error}`,
                     color: 0xFF0000,
                 }
