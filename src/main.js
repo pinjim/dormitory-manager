@@ -34,7 +34,7 @@ client.once('ready', () => {
         status: 'idle',
     });
                                             /* 目標伺服器租屋聊天室     測試伺服器測試聊天室 */ 
-    const channel = client.channels.cache.get(/*'1099675393335763107'*/'1043818575548391519');
+    const channel = client.channels.cache.get('1099675393335763107'/*'1043818575548391519'*/);
     setInterval(async () => {
         const ctxTime = new Date();
         const year = ctxTime.getFullYear();
@@ -131,7 +131,7 @@ client.once('ready', () => {
                                 color: 0x00FFFF,
                                 fields: [
                                     {
-                                    "name": `${embedcontent.field}`,
+                                    "name": ``,
                                     "value": `${embedcontent.value}`
                                     }
                                 ],
