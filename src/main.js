@@ -37,7 +37,7 @@ client.once('ready', () => {
                                             /* 目標伺服器租屋聊天室     測試伺服器測試聊天室 */ 
     const channel = client.channels.cache.get('1099675393335763107'/*'1043818575548391519'*/);
     setInterval(async () => {
-        const ctxTime = new Date(2024,8,23);
+        const ctxTime = new Date();
         const year = ctxTime.getFullYear();
         const month = ctxTime.getMonth() + 1;
         const date = ctxTime.getDate();
@@ -63,12 +63,12 @@ client.once('ready', () => {
                             fields: [
                                 {
                                     "name": `${dateinfo[0]} 週一`,
-                                    "value": `> ${GetMemberRole(schedule[0])}`,
+                                    "value": `> <@&${GetMemberRole(schedule[0])}>`,
                                     "inline": true
                                 },
                                 {
                                     "name": `${dateinfo[1]} 週二`,
-                                    "value": `> ${GetMemberRole(schedule[1])}`,
+                                    "value": `> <@&${GetMemberRole(schedule[1])}>`,
                                     "inline": true
                                 },
                                 {
@@ -78,12 +78,12 @@ client.once('ready', () => {
                                 },
                                 {
                                     "name": `${dateinfo[3]} 週四`,
-                                    "value": `> ${GetMemberRole(schedule[2])}`,
+                                    "value": `> <@&${GetMemberRole(schedule[2])}>`,
                                     "inline": true
                                 },
                                 {
                                     "name": `${dateinfo[4]} 週五`,
-                                    "value": `> ${GetMemberRole(schedule[3])}`,
+                                    "value": `> <@&${GetMemberRole(schedule[3])}>`,
                                     "inline": true
                                 },
                                 {
