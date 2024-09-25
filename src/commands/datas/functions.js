@@ -133,21 +133,21 @@ export const SetSchedule = async(dayOfWeek) =>{
     try {
         let index = GetIndex();
         const memberlist = GetMemberList();
-        console.log(`排程功能讀取到的索引值 : `);
-        console.log(dayOfWeek);
         console.log(`排程功能讀取到的差值 : `);
+        console.log(dayOfWeek);
+        console.log(`排程功能讀取到的索引值 : `);
         console.log(index);
         console.log(`排程功能讀取到的名單 : `);
         console.log(memberlist);
         let schedule = [];
         let offset;
-        if(dayOfWeek === 1) offset=0;
-        else if(dayOfWeek === 2) offset=1;
-        else if(dayOfWeek === 3 || dayOfWeek === 4) offset=2;
-        else if(dayOfWeek === 0 || dayOfWeek === 5|| dayOfWeek === 6) offset=3;
+        if(dayOfWeek === 1) offset=1;
+        else if(dayOfWeek === 2 || dayOfWeek === 3) offset=2;
+        else if(dayOfWeek === 4) offset=3;
+        else if(dayOfWeek === 0 || dayOfWeek === 5|| dayOfWeek === 6) offset=4;
         for(let i=0; i<offset; i++){
             index-=1;
-            if(index<=0) index=5;
+            if(index<0) index=5;
         }
         console.log(`格式化後的索引值 : `);
         console.log(index);
@@ -165,7 +165,7 @@ export const SetSchedule = async(dayOfWeek) =>{
 }
 
 export const SetEmbedContent = (dayOfWeek) => {
-    const index = GetIndex();
+    const index = GetIndex()-1;
     const MemberList = GetMemberList();
     console.log(`值日功能讀取到的索引值 : `);
     console.log(index);
