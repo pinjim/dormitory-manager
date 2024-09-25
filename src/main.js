@@ -151,8 +151,10 @@ client.once('ready', () => {
                 }else {
                     throw new Error(`無法找到指定的頻道`);
                 }
-                if(index+1>memberlist.length-1) SaveIndex(0);
-                else SaveIndex(index+1);
+                if(dayOfWeek === 1 || dayOfWeek === 2 || dayOfWeek === 4 || dayOfWeek ===5){
+                    if(index+1>memberlist.length-1) SaveIndex(0);
+                    else SaveIndex(index+1);
+                }
             }catch(error){
                 console.log(`${error}`);
             }
