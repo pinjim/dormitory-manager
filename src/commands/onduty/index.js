@@ -12,7 +12,7 @@ export const action = async (ctx) => {
         const year = currentTime.getFullYear();
         const month = currentTime.getMonth() + 1;
         const date = currentTime.getDate();
-        const embedcontent = SetEmbedContent(dayOfWeek);
+        const embedcontent = SetEmbedContent(dayOfWeek, true);
         await ctx.reply({
             embeds: [
                 {
