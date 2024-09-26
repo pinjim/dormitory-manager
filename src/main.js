@@ -121,7 +121,7 @@ client.once('ready', () => {
                 let index = GetIndex();
                 const memberlist = GetMemberList();
                 
-                const embedcontent = SetEmbedContent(dayOfWeek);
+                const embedcontent = SetEmbedContent(dayOfWeek, false);
                 if (channel) {
                     channel.send({
                         embeds: [
