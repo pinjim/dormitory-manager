@@ -129,7 +129,7 @@ export const SaveNewWeekCheck = (data) => {
     }
 }
 
-export const SetSchedule = async(dayOfWeek) =>{
+export const SetSchedule = async(dayOfWeek, reset) =>{
     try {
         let index = GetIndex();
         const memberlist = GetMemberList();
@@ -141,10 +141,11 @@ export const SetSchedule = async(dayOfWeek) =>{
         console.log(memberlist);
         let schedule = [];
         let offset;
-        if(dayOfWeek === 1) offset=1;
-        else if(dayOfWeek === 2 || dayOfWeek === 3) offset=2;
-        else if(dayOfWeek === 4) offset=3;
-        else if(dayOfWeek === 0 || dayOfWeek === 5|| dayOfWeek === 6) offset=4;
+        if(dayOfWeek === 1) offset=0;
+        else if(dayOfWeek === 2 || dayOfWeek === 3) offset=1;
+        else if(dayOfWeek === 4) offset=2;
+        else if(dayOfWeek === 0 || dayOfWeek === 5|| dayOfWeek === 6) offset=3;
+        offset += reset;
         for(let i=0; i<offset; i++){
             index-=1;
             if(index<0) index=5;
