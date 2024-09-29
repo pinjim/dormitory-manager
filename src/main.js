@@ -37,7 +37,7 @@ client.once('ready', () => {
                                             /* 目標伺服器租屋聊天室     測試伺服器測試聊天室 */ 
     const channel = client.channels.cache.get('1099675393335763107'/*'1043818575548391519'*/);
     setInterval(async () => {
-        const ctxTime = new Date();
+        const ctxTime = new Date(2024,8,30);
         const year = ctxTime.getFullYear();
         const month = ctxTime.getMonth() + 1;
         const date = ctxTime.getDate();
@@ -49,7 +49,7 @@ client.once('ready', () => {
             NewWeekCheck = 'true';
             SaveNewWeekCheck(NewWeekCheck);
             console.log(`偵測到換週，已更新排程表，目前排程表更新狀態 : ${NewWeekCheck}`);
-            const schedule = await SetSchedule(1);
+            const schedule = await SetSchedule(1, 1);
             const dateinfo = GetDateInfo(ctxTime);
             try{ 
                 if (channel) {
