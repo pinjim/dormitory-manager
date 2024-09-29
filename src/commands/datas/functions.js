@@ -165,9 +165,9 @@ export const SetSchedule = async(dayOfWeek, reset) =>{
     }
 }
 
-export const SetEmbedContent = (dayOfWeek,check) => {
+export const SetEmbedContent = (dayOfWeek, check) => {
     let index = GetIndex();
-    if(check === true) index-1;
+    if(check) index-=1;
     const MemberList = GetMemberList();
     console.log(`值日功能讀取到的索引值 : `);
     console.log(index);
