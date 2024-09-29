@@ -129,9 +129,9 @@ export const SaveNewWeekCheck = (data) => {
     }
 }
 
-export const SetSchedule = async(dayOfWeek) =>{
+export const SetSchedule = async(dayOfWeek, reset) =>{
     try {
-        let index = GetIndex();
+        let index = GetIndex()+reset;
         const memberlist = GetMemberList();
         console.log(`排程功能讀取到的差值 : `);
         console.log(dayOfWeek);
