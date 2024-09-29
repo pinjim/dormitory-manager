@@ -9,7 +9,7 @@ export const action = async (ctx) => {
     const ctxTime = new Date();
     const dateinfo = GetDateInfo(ctxTime);
     const offset = ctxTime.getDay();
-    const schedule = await SetSchedule(offset);
+    const schedule = await SetSchedule(offset, 1);
     try{
         await ctx.reply({
             embeds: [
