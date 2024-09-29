@@ -131,7 +131,7 @@ export const SaveNewWeekCheck = (data) => {
 
 export const SetSchedule = async(dayOfWeek, reset) =>{
     try {
-        let index = GetIndex()+reset;
+        let index = GetIndex();
         const memberlist = GetMemberList();
         console.log(`排程功能讀取到的差值 : `);
         console.log(dayOfWeek);
@@ -165,9 +165,9 @@ export const SetSchedule = async(dayOfWeek, reset) =>{
     }
 }
 
-export const SetEmbedContent = (dayOfWeek,check) => {
+export const SetEmbedContent = (dayOfWeek, check) => {
     let index = GetIndex();
-    if(check === true) index-1;
+    if(check) index-=1;
     const MemberList = GetMemberList();
     console.log(`值日功能讀取到的索引值 : `);
     console.log(index);
