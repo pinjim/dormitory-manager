@@ -8,7 +8,7 @@ export const command = new SlashCommandBuilder()
 
 const DutyStatus = async(target) =>{
     const dayOfWeek = new Date().getDay();
-    const schedule = await SetSchedule(dayOfWeek);
+    const schedule = await SetSchedule(dayOfWeek, 1);
     console.log(schedule)
     for(let i=0; i<schedule.length; i++){
         if(schedule[i] === target){
