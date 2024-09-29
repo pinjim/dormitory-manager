@@ -49,7 +49,7 @@ client.once('ready', () => {
             NewWeekCheck = 'true';
             SaveNewWeekCheck(NewWeekCheck);
             console.log(`偵測到換週，已更新排程表，目前排程表更新狀態 : ${NewWeekCheck}`);
-            const schedule = await SetSchedule(1, 1);
+            const schedule = await SetSchedule(1, 0);
             const dateinfo = GetDateInfo(ctxTime);
             try{ 
                 if (channel) {
