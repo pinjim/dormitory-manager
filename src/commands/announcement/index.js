@@ -7,7 +7,6 @@ export const command = new SlashCommandBuilder()
         option.setName('title')
             .setDescription('設定嵌入內容標題')
             .setRequired(true))
-
     .addIntegerOption(option =>
         option.setName('field1')
             .setDescription('是否啟用第一段內文')
@@ -32,8 +31,6 @@ export const command = new SlashCommandBuilder()
                 { name: 'ture', value: 1 },
                 { name: 'false', value: 0 },
             ))
-    
-    
     .addStringOption(option =>
         option.setName('title_url')
             .setDescription('設定標題連結')
@@ -42,7 +39,6 @@ export const command = new SlashCommandBuilder()
         option.setName('description')
             .setDescription('設定標題敘述')
             .setRequired(false))
-
     .addStringOption(option =>
         option.setName('field1_name')
             .setDescription('設定第一段內文標題')
@@ -102,6 +98,13 @@ export const action = async(ctx) => {
         }
         await ctx.reply({
             embeds: [{
+                type: 'rich',
+                title: `公告發布成功`
+            }],
+            ephemeral: true
+        });
+        await ctx.channel.send({
+            embeds: [{
               title: title,
               url: titleURL,
               description: description,
@@ -112,7 +115,7 @@ export const action = async(ctx) => {
               color: 0x00FFFF,
               timestamp: currentTime.toISOString(),
               footer: {
-                text: 'powered by @pinjim0407'
+                text: `本公告由${ctx.user.username}發布\npowered by @pinjim0407`
               }
             }]
           });
