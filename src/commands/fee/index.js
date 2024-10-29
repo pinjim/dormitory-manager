@@ -26,7 +26,7 @@ export const command = new SlashCommandBuilder()
             .setRequired(false));
 
 const ctxTime = new Date();
-const memberlist = GetMemberList();
+const memberlist = [`左仲凱`,`黃智祥`,`蘇翊嘉`,`黃品鈞`,`李臸宇`,`張桂嘉`];
 
 export const GetFeeIndex = () => {
     let index;
