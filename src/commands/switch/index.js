@@ -37,7 +37,7 @@ export const action = async (ctx) => {
         let list = [];
         let member = [];
         let index = [];
-        list.push(await SetSchedule(dayOfWeek));
+        list.push(await SetSchedule(dayOfWeek,1));
         list.push(GetMemberList());
         member.push(ctx.options.getString('member1'));
         member.push(ctx.options.getString('member2'));
