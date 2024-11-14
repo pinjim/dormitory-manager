@@ -121,7 +121,7 @@ export const action = async(ctx) => {
           });
     }catch(error){
         console.log(error);
-        await ctx.reply({
+        await ctx.channel.send({
             embeds: [
                 {
                     type: 'rich',
@@ -129,7 +129,8 @@ export const action = async(ctx) => {
                     description: `${error}`,
                     color: 0xFF0000,
                 }
-            ]
+            ],
+            ephemeral: true
         });
     }
 }
