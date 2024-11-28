@@ -133,8 +133,8 @@ export const WaterFee = (fee) => {
 export const ElectricityFee = (fee1, fee2) => {
     let index = GetFeeIndex();
     let publicfee = Math.round(fee1 * 0.3/6);
-    let sfjroom = Math.round(fee1 * 0.2);
-    let sfsroom = Math.round(fee1 * 0.5);
+    let sfjroom = Math.round(fee1 * 0.3);
+    let sfsroom = Math.round(fee1 * 0.4);
     let tfbroom = Math.round(fee2 * 0.3);
     let tfsroom = Math.round(fee2 * 0.2);
     let ffbroom = Math.round(fee2 * 0.3);
@@ -150,7 +150,7 @@ export const ElectricityFee = (fee1, fee2) => {
             {
                 type: 'rich',
                 title: `電費 ${memberlist[index]}負責繳費`,
-                description: `1/2樓 ${fee1}(公用30%、小間50%、和室20%)\n3/4樓 ${fee2}(大間30%、小間20%)\n`,
+                description: `1/2樓 ${fee1}(公用30%、小間40%、和室30%)\n3/4樓 ${fee2}(大間30%、小間20%)\n`,
                 color: color,
                 fields: [
                     {
