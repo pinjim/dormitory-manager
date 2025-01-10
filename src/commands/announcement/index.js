@@ -114,7 +114,7 @@ export const action = async(ctx) => {
               },
               color: 0x00FFFF,
               timestamp: currentTime.toISOString(),
-              footer: {
+              footer: { 
                 text: `本公告由${ctx.user.username}發布\npowered by @pinjim0407`
               }
             }]
