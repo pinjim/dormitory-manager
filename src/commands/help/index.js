@@ -53,7 +53,7 @@ export const action = async(ctx) => {
                     color: 0x00FFFF,
                     timestamp: ctxTime.toISOString(),
                     footer: {
-                        text: '工作內容及注意事項請使用“/排程”指令以確認。\npowered by @pinjim0407'
+                        text: 'powered by @pinjim0407'
                     }
                 },
             ],
