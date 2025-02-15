@@ -163,4 +163,14 @@ client.once('ready', () => {
     }, 60000);
 });
 
+client.on('messageCreate', message => {
+    if(message.author.bot) return;
+    const prefix = '!';
+    if(message.author.id != '631743756147752961') return;
+    else if(message.content.includes(prefix+`repeat`)){
+        message.delete();
+        message.channel.send(`${message.content.substring(8)}`);
+    }
+});
+
 client.login(process.env.TOKEN)
