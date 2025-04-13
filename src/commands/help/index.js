@@ -41,6 +41,7 @@ const menu = new StringSelectMenuBuilder()
 const row = new ActionRowBuilder()
     .addComponents(menu);
 
+
 export const action = async(ctx) => {
     try {
         const ctxTime = new Date();
@@ -70,7 +71,7 @@ export const action = async(ctx) => {
                             {
                                 type: 'rich',
                                 title: `值日`,
-                                description: '可以查看當天的值日成員',
+                                description: '</值日:1231495900627734580> - 可以查看當天的值日成員',
                                 color: 0x00FFFF,
                                 fields: [
                                     {
@@ -97,7 +98,7 @@ export const action = async(ctx) => {
                             {
                                 type: 'rich',
                                 title: `排程`,
-                                description: '可以查看本週的值日排程',
+                                description: '</排程:1231495900627734579> - 可以查看本週的值日排程',
                                 color: 0x00FFFF,
                                 fields: [
                                     {
@@ -124,7 +125,7 @@ export const action = async(ctx) => {
                             {
                                 type: 'rich',
                                 title: `換班`,
-                                description: '可以將給定的兩位成員值日日期互換',
+                                description: '</換班:1238830882857422849> - 可以將給定的兩位成員值日日期互換',
                                 color: 0x00FFFF,
                                 fields: [
                                     {
@@ -177,7 +178,7 @@ export const action = async(ctx) => {
                             {
                                 type: 'rich',
                                 title: `名單`,
-                                description: '可以查看成員名單以及有無負責值日或繳費',
+                                description: '</名單:1287045744817340520> - 可以查看成員名單以及有無負責值日或繳費',
                                 color: 0x00FFFF,
                                 fields: [
                                     {
@@ -204,7 +205,7 @@ export const action = async(ctx) => {
                             {
                                 type: 'rich',
                                 title: `帳單`,
-                                description: '可以自動計算帳單金額分配及分配繳費成員',
+                                description: '</帳單:1252866807145037905> - 可以自動計算帳單金額分配及分配繳費成員',
                                 color: 0x00FFFF,
                                 fields: [
                                     {
@@ -267,7 +268,7 @@ export const action = async(ctx) => {
                             {
                                 type: 'rich',
                                 title: `公告`,
-                                description: '可以讓機器人在伺服器中張貼嵌入內容',
+                                description: '</公告:1287045744817340519> - 可以讓機器人在伺服器中張貼嵌入內容',
                                 color: 0x00FFFF,
                                 fields: [
                                     {
@@ -415,7 +416,7 @@ export const action = async(ctx) => {
                             {
                                 type: 'rich',
                                 title: `晚餐`,
-                                description: '可以查詢或隨機抽選一家常用餐廳',
+                                description: '</晚餐:1238859640809459842> - 可以查詢或隨機抽選一家常用餐廳',
                                 color: 0x00FFFF,
                                 fields: [
                                     {
