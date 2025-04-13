@@ -118,47 +118,44 @@ client.once('ready', () => {
             }
         }
         if (/*時*/ctxTime.getHours() === 0 && /*分*/ctxTime.getMinutes() === 0) {
-            try{
-                let index = GetIndex();
-                const memberlist = GetMemberList();
-                
-                const embedcontent = SetEmbedContent(dayOfWeek, false);
-                if (channel) {
-                    channel.send({
-                        embeds: [
-                            {
-                                type: 'rich',
-                                title: `${year}/${month}/${date} ${embedcontent.title}`,
-                                description: '',
-                                color: 0x00FFFF,
-                                fields: [
-                                    {
-                                    "name": ``,
-                                    "value": `${embedcontent.value}`
+                try{
+                    let index = GetIndex();
+                    const memberlist = GetMemberList();
+                    const embedcontent = SetEmbedContent(dayOfWeek, false);
+                    if (channel) {
+                        channel.send({
+                            embeds: [
+                                {
+                                    type: 'rich',
+                                    title: `${year}/${month}/${date} ${embedcontent.title}`,
+                                    description: '',
+                                    color: 0x00FFFF,
+                                    fields: [
+                                        {
+                                        "name": ``,
+                                        "value": `${embedcontent.value}`
+                                        }
+                                    ],
+                                    image: {
+                                        "url": `https://cdn.discordapp.com/attachments/1060629545398575255/1229843780518019142/image.png?ex=66312846&is=661eb346&hm=e80e04f017bfeffcffdce4fac134972b3a440fe894d611fe7ba8cf7e4d51f758&`,
+                                        "height": 0,
+                                        "width": 0
+                                    },
+                                    timestamp: ctxTime.toISOString(),
+                                    footer: {
+                                        text: '工作內容及注意事項請使用“/排程”指令以確認。\npowered by @pinjim0407'
                                     }
-                                ],
-                                image: {
-                                    "url": `https://cdn.discordapp.com/attachments/1060629545398575255/1229843780518019142/image.png?ex=66312846&is=661eb346&hm=e80e04f017bfeffcffdce4fac134972b3a440fe894d611fe7ba8cf7e4d51f758&`,
-                                    "height": 0,
-                                    "width": 0
                                 },
-                                timestamp: ctxTime.toISOString(),
-                                footer: {
-                                    text: '工作內容及注意事項請使用“/排程”指令以確認。\npowered by @pinjim0407'
-                                }
-                            },
-                        ]
-                    });
-                }else {
-                    throw new Error(`無法找到指定的頻道`);
-                }
-                if(dayOfWeek === 1 || dayOfWeek === 2 || dayOfWeek === 4 || dayOfWeek ===5){
+                            ]
+                        });
+                    }else {
+                        throw new Error(`無法找到指定的頻道`);
+                    }
                     if(index+1>memberlist.length-1) SaveIndex(0);
                     else SaveIndex(index+1);
+                }catch(error){
+                    console.log(`${error}`);
                 }
-            }catch(error){
-                console.log(`${error}`);
-            }
         }
     }, 60000);
 });
